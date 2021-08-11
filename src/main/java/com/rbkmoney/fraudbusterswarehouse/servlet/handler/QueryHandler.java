@@ -22,7 +22,10 @@ public class QueryHandler implements QueryServiceSrv.Iface {
 
     @Override
     public Result execute(Query query) {
-        String queryStatement = queryPreparationService.prepare(query.getStatement(), query.getParams());
+        String queryStatement = query.getStatement();
+        if (query.isSetParams()) {
+            queryStatement = queryPreparationService.prepare(query.getStatement(), query.getParams());
+        }
         List<Map<String, String>> queryResult = queryService.query(queryStatement);
         return resultConverter.convert(queryResult);
     }

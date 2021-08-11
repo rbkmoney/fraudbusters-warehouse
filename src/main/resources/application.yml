@@ -42,3 +42,7 @@ clickhouse:
     password: "password"
     connection-timeout: 50000
     compress: false
+
+testcontainers:
+  clickhouse:
+    tag: '19.17'
