@@ -34,3 +34,15 @@ spring:
 info:
   version: '@project.version@'
   stage: dev
+
+clickhouse:
+  db:
+    url: "jdbc:clickhouse://localhost:8123/default"
+    user: "user"
+    password: "password"
+    connection-timeout: 50000
+    compress: false
+
+testcontainers:
+  clickhouse:
+    tag: '19.17'
