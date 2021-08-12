@@ -14,15 +14,11 @@ public class ResultConverter implements Converter<List<Map<String, String>>, Res
 
     @Override
     public Result convert(List<Map<String, String>> queryResult) {
-        Result result = new Result();
-        List<Row> rows = queryResult.stream()
-                .map(rowValues -> {
-                    Row row = new Row();
-                    row.setValues(rowValues);
-                    return row;
-                })
-                .collect(Collectors.toList());
-        result.setValues(rows);
-        return result;
+        return new Result()
+                .setValues(queryResult.stream()
+                        .map(rowValues -> new Row()
+                                .setValues(rowValues))
+                        .collect(Collectors.toList())
+                );
     }
 }

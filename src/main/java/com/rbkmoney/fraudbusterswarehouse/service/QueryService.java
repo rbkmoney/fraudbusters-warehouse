@@ -5,6 +5,5 @@ import java.util.Map;
 
 public interface QueryService {
 
-    List<Map<String, String>> query(String statement);
-
+    List<Map<String, String>> query(String statement, Map<String, String> params);
 }

@@ -27,9 +27,9 @@ class QueryServiceImplTest extends AbstractIntegrationTest {
     @Test
     void queryWithEmptyResult() {
         String select = "select";
-        when(queryRepository.query(select)).thenReturn(Collections.emptyList());
+        when(queryRepository.query(select, Collections.emptyMap())).thenReturn(Collections.emptyList());
 
-        List<Map<String, String>> result = queryService.query(select);
+        List<Map<String, String>> result = queryService.query(select, Collections.emptyMap());
 
         assertTrue(result.isEmpty());
 
@@ -38,12 +38,13 @@ class QueryServiceImplTest extends AbstractIntegrationTest {
     @Test
     void queryWithResult() {
         String select = "select";
-        Map<String, String> values = new HashMap<>();
+        Map<String, String> params = Map.of("param", "value");
+        Map<String, Object> values = new HashMap<>();
         values.put("key", "value");
-        List<Map<String, String>> result = List.of(values);
-        when(queryRepository.query(select)).thenReturn(result);
+        List<Map<String, Object>> result = List.of(values);
+        when(queryRepository.query(select, params)).thenReturn(result);
 
-        List<Map<String, String>> actualResult = queryService.query(select);
+        List<Map<String, String>> actualResult = queryService.query(select, params);
 
         assertEquals(result, actualResult);
 

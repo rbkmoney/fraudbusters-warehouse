@@ -6,6 +6,8 @@ import com.rbkmoney.testcontainers.annotations.clickhouse.ClickhouseTestcontaine
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -20,11 +22,24 @@ class QueryRepositoryTest extends AbstractIntegrationTest {
     private QueryRepository queryRepository;
 
     @Test
-    void query() {
-        List<Map<String, String>> result = queryRepository.query(TestQuery.QUERY_METRIC_RECURRENT);
+    void queryWithoutParams() {
+        List<Map<String, Object>> result =
+                queryRepository.query(TestQuery.QUERY_METRIC_RECURRENT, Collections.emptyMap());
 
-        Map<String, String> stringObjectMap = result.get(0);
-        assertEquals("ad8b7bfd-0760-4781-a400-51903ee8e504", stringObjectMap.get("shopId"));
-        assertEquals("166.66666666666666", stringObjectMap.get("metric"));
+        Map<String, Object> stringObjectMap = result.get(0);
+        assertEquals("ad8b7bfd-0760-4781-a400-51903ee8e504", String.valueOf(stringObjectMap.get("shopId")));
+        assertEquals("166.66666666666666", String.valueOf(stringObjectMap.get("metric")));
+    }
+
+    @Test
+    void queryWithParams() {
+        Map<String, String> params = new HashMap<>();
+        params.put("dateFrom", "2019-12-05");
+        params.put("dateTo", "2019-12-12");
+        List<Map<String, Object>> result = queryRepository.query(TestQuery.QUERY_METRIC_RECURRENT_WITH_PARAMS, params);
+
+        Map<String, Object> stringObjectMap = result.get(0);
+        assertEquals("ad8b7bfd-0760-4781-a400-51903ee8e504", String.valueOf(stringObjectMap.get("shopId")));
+        assertEquals("166.66666666666666", String.valueOf(stringObjectMap.get("metric")));
     }
 }

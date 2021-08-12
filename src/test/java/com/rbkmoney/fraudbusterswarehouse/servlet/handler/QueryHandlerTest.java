@@ -8,12 +8,12 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 class QueryHandlerTest extends AbstractIntegrationTest {
@@ -34,7 +34,7 @@ class QueryHandlerTest extends AbstractIntegrationTest {
         Map<String, String> values = new HashMap<>();
         values.put("key", "value");
         List<Map<String, String>> result = List.of(values);
-        when(queryService.query(statement)).thenReturn(result);
+        when(queryService.query(statement, Collections.emptyMap())).thenReturn(result);
 
         Result actualResult = queryHandler.execute(query);
 
@@ -44,10 +44,10 @@ class QueryHandlerTest extends AbstractIntegrationTest {
 
     @Test
     void execute() {
-        String statement = "select * from table where id = $id";
+        String statement = "select * from table where id = :id";
         Map<String, String> params = new HashMap<>();
         String value = "1";
-        params.put("\\$id", value);
+        params.put("id", value);
         Query query = new Query();
         query.setStatement(statement);
         query.setParams(params);
@@ -55,7 +55,7 @@ class QueryHandlerTest extends AbstractIntegrationTest {
         Map<String, String> values = new HashMap<>();
         values.put("key", "value");
         List<Map<String, String>> result = List.of(values);
-        when(queryService.query(anyString())).thenReturn(result);
+        when(queryService.query(statement, params)).thenReturn(result);
 
         Result actualResult = queryHandler.execute(query);
 
